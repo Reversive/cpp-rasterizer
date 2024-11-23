@@ -33,8 +33,8 @@ private:
     }
   };
   std::vector<uint32_t> color_buffer;
-  std::unique_ptr<SDL_Texture, SDLTextureDeleter> texture_buffer;
   std::unique_ptr<Window> window;
   std::unique_ptr<SDL_Renderer, SDLRendererDeleter> renderer;
+  std::unique_ptr<SDL_Texture, SDLTextureDeleter> texture_buffer;
   int pitch;
 };

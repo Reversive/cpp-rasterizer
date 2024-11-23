@@ -6,29 +6,8 @@ Engine::Engine(const Config &config) : config(config) {
     throw std::invalid_argument("FPS must be greater than 0");
   }
 
-  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-    throw std::runtime_error(std::string("SDL Init throwed: ") +
-                             SDL_GetError());
-  }
-  this->initialized = true;
-  try {
-    this->renderer = std::make_unique<Renderer>(config.renderer_cfg);
-    this->scene = std::make_unique<Scene>();
-  } catch (const std::exception &e) {
-    this->clean_up();
-    throw;
-  }
-}
-
-Engine::~Engine() { this->clean_up(); }
-
-void Engine::clean_up() {
-  this->renderer.reset();
-  this->scene.reset();
-  if (this->initialized) {
-    SDL_Quit();
-    this->initialized = false;
-  }
+  this->renderer = std::make_unique<Renderer>(config.renderer_cfg);
+  this->scene = std::make_unique<Scene>();
 }
 
 void Engine::render() {
@@ -40,6 +19,7 @@ void Engine::render() {
 
 void Engine::update() { this->scene->update(); }
 
+// TODO: Proper Time Step
 void Engine::run() {
   this->running = true;
   while (this->running) {

@@ -6,6 +6,11 @@ Window::Window(const Config &config) : config(config) {
     throw std::invalid_argument("Window dimensions must be positive");
   }
 
+  if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+    throw std::runtime_error(std::string("SDL Init throwed: ") +
+                             SDL_GetError());
+  }
+
   SDL_Window *raw_window = SDL_CreateWindow(
       config.title.c_str(), config.dimensions.x, config.dimensions.y,
       config.dimensions.width, config.dimensions.height, config.flags);

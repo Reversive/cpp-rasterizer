@@ -25,6 +25,7 @@ private:
     void operator()(SDL_Window *window) {
       if (window) {
         SDL_DestroyWindow(window);
+        SDL_Quit();
       }
     }
   };
