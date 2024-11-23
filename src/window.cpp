@@ -11,11 +11,11 @@ Window::Window(const Config &config) : config(config) {
       config.dimensions.width, config.dimensions.height, config.flags);
 
   if (raw_window == nullptr) {
-    throw std::runtime_error(std::string("SDL_CreateWindow threw: ") +
+    throw std::runtime_error(std::string("SDL_CreateWindow returned: ") +
                              SDL_GetError());
   }
 
   this->window.reset(raw_window);
 }
 
-SDL_Window *Window::get_sdl_window() const { return this->window.get(); }
+SDL_Window *Window::current_window() const { return this->window.get(); }

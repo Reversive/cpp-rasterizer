@@ -18,7 +18,7 @@ public:
   };
 
   explicit Window(const Config &config);
-  SDL_Window *get_sdl_window() const;
+  SDL_Window *current_window() const;
 
 private:
   struct SDLWindowDeleter {
