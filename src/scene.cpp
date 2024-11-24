@@ -8,8 +8,8 @@ void Scene::draw(Renderer &renderer) {
     object->draw(renderer);
   }
 }
-void Scene::update() {
+void Scene::update(float elapsed) {
   for (auto &object : this->objects) {
-    object->update();
+    object->update(elapsed);
   }
 }

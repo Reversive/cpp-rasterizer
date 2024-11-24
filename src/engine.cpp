@@ -1,4 +1,5 @@
 #include "engine.hpp"
+#include "time_step.hpp"
 #include <stdexcept>
 
 Engine::Engine(const Config &config) : config(config) {
@@ -17,21 +18,25 @@ void Engine::render() {
   this->renderer->present();
 }
 
-void Engine::update() { this->scene->update(); }
+void Engine::update(float elapsed) { this->scene->update(elapsed); }
 
-// TODO: Proper Time Step
 void Engine::run() {
   this->running = true;
+  TimeStep time_step(60.0);
   while (this->running) {
-    // TODO: Make a proper event handler
     SDL_Event event;
     SDL_PollEvent(&event);
     switch (event.type) {
     case SDL_QUIT:
       this->running = false;
       break;
+    case SDL_KEYDOWN:
+      if (event.key.keysym.sym == SDLK_ESCAPE) {
+        this->running = false;
+      }
+      break;
     }
-    this->update();
+    time_step.update([this](float dt) { this->update(dt); });
     this->render();
   }
 }
