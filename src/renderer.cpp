@@ -65,15 +65,15 @@ void Renderer::draw_rect(int x, int y, int w, int h, uint32_t color) {
   }
 }
 
-void Renderer::draw_line(const Vector2 &p0, const Vector2 &p1, uint32_t color) {
+void Renderer::draw_line(int x0, int y0, int x1, int y1, uint32_t color) {
   // TODO
-  float dx = p1.x - p0.x;
-  float dy = p1.y - p0.y;
-  float step = std::abs(dx) > std::abs(dy) ? std::abs(dx) : std::abs(dy);
-  float x_inc = dx / (float)step;
-  float y_inc = dy / (float)step;
-  float x = p0.x;
-  float y = p0.y;
+  int dx = x1 - x0;
+  int dy = y1 - y0;
+  int step = std::abs(dx) > std::abs(dy) ? std::abs(dx) : std::abs(dy);
+  double x_inc = dx / (double)step;
+  double y_inc = dy / (double)step;
+  double x = x0;
+  double y = y0;
   for (int i = 0; i <= step; i++) {
     this->draw_pixel((int)std::round(x), (int)std::round(y), color);
     x += x_inc;
@@ -100,9 +100,12 @@ void Renderer::draw_mesh(const Mesh &mesh) {
     const Vector2 &pr_third = {(third.x / third.z) + (float)this->width / 2,
                                (third.y / third.z) + (float)this->height / 2};
 
-    this->draw_line(pr_first, pr_second, 0xFFFFFFFF);
-    this->draw_line(pr_second, pr_third, 0xFFFFFFFF);
-    this->draw_line(pr_third, pr_first, 0xFFFFFFFF);
+    this->draw_line((int)pr_first.x, (int)pr_first.y, (int)pr_second.x,
+                    (int)pr_second.y, 0xFFFFFFFF);
+    this->draw_line((int)pr_second.x, (int)pr_second.y, (int)pr_third.x,
+                    (int)pr_third.y, 0xFFFFFFFF);
+    this->draw_line((int)pr_third.x, (int)pr_third.y, (int)pr_first.x,
+                    (int)pr_first.y, 0xFFFFFFFF);
 
     /*world_position = world_position.scale(400.f, 400.f, 1.f);
     world_position = world_position.translate(0.f, 0.f, -15.f);

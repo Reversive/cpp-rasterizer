@@ -18,7 +18,7 @@ public:
   void draw_pixel(int x, int y, uint32_t color);
   void draw_mesh(const Mesh &mesh);
   void draw_rect(int x, int y, int w, int h, uint32_t color);
-  void draw_line(const Vector2 &p1, const Vector2 &p2, uint32_t color);
+  void draw_line(int x0, int y0, int x1, int y1, uint32_t color);
   SDL_Renderer *raw() const;
 
 private:

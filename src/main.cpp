@@ -47,7 +47,30 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
                    Face{{4, 0, 3}}, Face{{4, 3, 7}}, Face{{3, 2, 6}},
                    Face{{3, 6, 7}}, Face{{4, 5, 1}}, Face{{4, 1, 0}}};
 
-    scene->add(std::move(cube));
+    auto octahedron = std::make_unique<Mesh>();
+    octahedron->vertices = {
+        Vector3{0.0f, 5.0f, 0.0f},  // 0: top vertex
+        Vector3{5.0f, 0.0f, 0.0f},  // 1: right vertex
+        Vector3{0.0f, 0.0f, 5.0f},  // 2: front vertex
+        Vector3{-5.0f, 0.0f, 0.0f}, // 3: left vertex
+        Vector3{0.0f, 0.0f, -5.0f}, // 4: back vertex
+        Vector3{0.0f, -5.0f, 0.0f}  // 5: bottom vertex
+    };
+
+    octahedron->faces = {
+        Face{{0, 2, 1}}, // top-front-right
+        Face{{0, 1, 4}}, // top-right-back
+        Face{{0, 4, 3}}, // top-back-left
+        Face{{0, 3, 2}}, // top-left-front
+
+        Face{{5, 1, 2}}, // bottom-right-front
+        Face{{5, 4, 1}}, // bottom-back-right
+        Face{{5, 3, 4}}, // bottom-left-back
+        Face{{5, 2, 3}}  // bottom-front-left
+    };
+
+    // scene->add(std::move(cube));
+    scene->add(std::move(octahedron));
     engine.run();
   } catch (const std::exception &e) {
     std::cerr << "Error " << e.what() << "\n";
