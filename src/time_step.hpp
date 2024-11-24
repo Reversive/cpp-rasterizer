@@ -7,9 +7,9 @@
 class TimeStep {
 public:
   explicit TimeStep(float updates_per_second)
-      : m_target_delta(std::chrono::duration<float>(1.0f / updates_per_second)),
-        m_last_time(std::chrono::steady_clock::now()), m_accumulated_time(0.0f),
-        m_max_delta(
+      : target_delta(std::chrono::duration<float>(1.0f / updates_per_second)),
+        last_time(std::chrono::steady_clock::now()), accumulated_time(0.0f),
+        max_delta(
             std::chrono::duration<float>(0.25f)) // Prevent spiral of death
   {
     if (updates_per_second <= 0.0f) {
@@ -27,33 +27,33 @@ public:
     using namespace std::chrono;
 
     auto current_time = steady_clock::now();
-    duration<float> frame_time = current_time - m_last_time;
-    m_last_time = current_time;
+    duration<float> frame_time = current_time - last_time;
+    last_time = current_time;
 
-    if (frame_time > m_max_delta) {
-      frame_time = m_max_delta;
+    if (frame_time > max_delta) {
+      frame_time = max_delta;
     }
 
-    m_accumulated_time += frame_time.count();
+    accumulated_time += frame_time.count();
 
-    while (m_accumulated_time >= m_target_delta.count()) {
-      update_fn(m_target_delta.count());
-      m_accumulated_time -= m_target_delta.count();
+    while (accumulated_time >= target_delta.count()) {
+      update_fn(target_delta.count());
+      accumulated_time -= target_delta.count();
     }
 
-    auto sleep_time = m_target_delta - (steady_clock::now() - current_time);
+    auto sleep_time = target_delta - (steady_clock::now() - current_time);
     if (sleep_time > duration<float>(0.f)) {
       std::this_thread::sleep_for(sleep_time);
     }
   }
 
-  [[nodiscard]] float getInterpolationFactor() const noexcept {
-    return m_accumulated_time / m_target_delta.count();
+  [[nodiscard]] float get_interpolation_factor() const noexcept {
+    return accumulated_time / target_delta.count();
   }
 
 private:
-  std::chrono::duration<float> m_target_delta;
-  std::chrono::steady_clock::time_point m_last_time;
-  float m_accumulated_time;
-  std::chrono::duration<float> m_max_delta;
+  std::chrono::duration<float> target_delta;
+  std::chrono::steady_clock::time_point last_time;
+  float accumulated_time;
+  std::chrono::duration<float> max_delta;
 };
